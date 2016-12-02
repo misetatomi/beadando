@@ -50,11 +50,11 @@ frekvencia =0;
         Populate_List()
     end
     function removebutton_Callback(hObject, eventdata, handles)
-	for i = 0:length(fuggvenytar)
+	for i = 0:size(fuggvenytar)
 		if(tar.Value == i)
 			if(i ~= size(fuggvenytar, 1))
 				fuggvenytar(i, :) = fuggvenytar(i+1, :);
-				for j=i+1:length(fuggvenytar)-1
+				for j=i+1:size(fuggvenytar)-1
 					fuggvenytar(j, :) = fuggvenytar(j+1, :);
 				end
 				
