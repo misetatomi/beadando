@@ -50,24 +50,25 @@ frekvencia =0;
         Populate_List()
     end
     function removebutton_Callback(hObject, eventdata, handles)
-	for i = 0:size(fuggvenytar)
-		if(tar.Value == i)
-			if(i ~= size(fuggvenytar, 1))
-				fuggvenytar(i, :) = fuggvenytar(i+1, :);
-				for j=i+1:size(fuggvenytar)-1
-					fuggvenytar(j, :) = fuggvenytar(j+1, :);
+		for i = 0:size(fuggvenytar)
+			if(tar.Value == i)
+				if(i ~= size(fuggvenytar, 1))
+					fuggvenytar(i, :) = fuggvenytar(i+1, :);
+					for j=i+1:size(fuggvenytar)-1
+						fuggvenytar(j, :) = fuggvenytar(j+1, :);
+					end
+				
+					fuggvenytar(j, :) = [];
+				end
+	
+				if(i == size(fuggvenytar, 1))
+					fuggvenytar(i, :) = [];
 				end
 				
-				fuggvenytar(j, :) = [];
 			end
-			
-			if(i == size(fuggvenytar, 1))
-				fuggvenytar(i, :) = [];
-			end
-			
 		end
-    end
-end
+		Populate_List();
+	end
 function setfrekvencia(source,callbackdata)
         frekvencia = str2num(get(editfrekvencia,'String'))
 end
