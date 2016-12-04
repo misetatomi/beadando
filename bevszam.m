@@ -5,15 +5,10 @@ amplitudo =0;
 offset =0;
 frekvencia =0;
 fuggvenytar = [];
-multx = [];
-multy = [];
+multx = 1;
+multy = 1;
 window = figure('Position',[100,100,700,500])
 window.SizeChangedFcn = @DrawWindow;
-DrawWindow()
-    function DrawWindow(hObject, eventdata, handles)
-        multx = window.Position(3)./700;
-        multy = window.Position(4)./500;
-        clf;
 txt1 = uicontrol('Style','text',...
     'Position',[80*multx 450*multy 120*multx 20*multy],...
     'String','Amplitudo');
@@ -50,6 +45,22 @@ deletebutt = uicontrol('Style', 'pushbutton', 'String', 'Delete',...
 plotbutt = uicontrol('Style', 'pushbutton', 'String', 'Plot',...
     'Position', [10*multx 300*multy 50*multx 20*multy],...
     'Callback', @plotbutton_Callback);
+    function DrawWindow(hObject, eventdata, handles)
+        multx = window.Position(3)./700;
+        multy = window.Position(4)./500;
+        clf;
+txt1.Position=[80*multx 450*multy 120*multx 20*multy];
+txt2.Position=[230*multx 450*multy 120*multx 20*multy];
+txt3.Position=[378*multx 450*multy 120*multx 20*multy];
+txt4.Position=[528*multx 450*multy 120*multx 20*multy];
+editamplitudo.Position=[90*multx 430*multy 100*multx 25*multy];
+editfrekvencia.Position=[238*multx 430*multy 100*multx 25*multy];
+editoffset.Position=[388*multx 430*multy 100*multx 25*multy];
+editfazis.Position=[535*multx 430*multy 100*multx 25*multy];
+tar.Position=[90*multx 300*multy 545*multx 100*multy];
+addbutt.Position=[10*multx 380*multy 50*multx 20*multy];
+deletebutt.Position=[10*multx 340*multy 50*multx 20*multy];
+plotbutt.Position=[10*multx 300*multy 50*multx 20*multy];
     end
     function Populate_List()
        tar.String=[];
@@ -73,8 +84,8 @@ plotbutt = uicontrol('Style', 'pushbutton', 'String', 'Plot',...
         end
     end
     function setamplitudo(source,callbackdata)
-        amplitudo = str2num(get(window.editamplitudo,'String'))
-        if ~isnumeric(str2num(get(window.editamplitudo,'String')))
+        amplitudo = str2num(get(editamplitudo,'String'))
+        if ~isnumeric(str2num(get(editamplitudo,'String')))
             amplitudo = 'Wrong input';
         end
     end
