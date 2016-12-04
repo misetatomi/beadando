@@ -37,9 +37,9 @@ plotbutt = uicontrol('Style', 'pushbutton', 'String', 'Plot',...
     'Callback', @plotbutton_Callback);
 fuggvenytar = []
     function Populate_List()
-        tar.String=[];
+       tar.String=[];
        for i=1:size(fuggvenytar)   
-           tar.String=[tar.String; mat2str(fuggvenytar(i,1)) '  '  mat2str(fuggvenytar(i,2)) '   ' mat2str(fuggvenytar(i,3))];
+           tar.String=[tar.String; num2str(fuggvenytar(i,1)) '  '  num2str(fuggvenytar(i,2)) '   ' num2str(fuggvenytar(i,3))];
        end
     end
     function addbutton_Callback(hObject, eventdata, handles)
@@ -48,6 +48,7 @@ fuggvenytar = []
     end
     function removebutton_Callback(hObject, eventdata, handles)
         fuggvenytar(tar.Value,:)=[]; 
+        tar.Value = 1;
         Populate_List();
     end
     function setfrekvencia(source,callbackdata)
