@@ -28,12 +28,15 @@ classdef SinePlotter < handle
 	end
 	
 	properties(Constant)
-		%TODO: A vezérlõelemek méretei lehetnek konstansok, 
-		% hogy egyszerûen paraméterezhetõ legyen a felület.
 		
 		H_1 = 30;	% Hézagok
 		H_2 = 60;
 		H_3 = 20;
+		H_4 = 15;
+		
+		B_h = 25; % Gombmagasság
+		B_w = 90; % Gombszélesség
+		
 		
 		L_0 = 180;
 	end
@@ -58,42 +61,41 @@ classdef SinePlotter < handle
 			% Az átméretezés kezelése saját függvénnyel
 			this.Window.SizeChangedFcn = @this.WindowSizeChanged;
 			
-			this.EditAmplitude = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [10 15 90 25]);
+			this.EditAmplitude = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [10 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h]);
 			SinePlotter.AddLabel(this.EditAmplitude, 'Amplitúdó');
 			
 			this.FunctionSelector = uicontrol('Parent', this.Window, 'Style', 'popupmenu', ...
-				'Position', [110 15 60 24], 'String', {'cos', 'sin'});
+				'Position', [110 SinePlotter.H_4 60 SinePlotter.B_h], 'String', {'cos', 'sin'});
 			SinePlotter.AddLabel(this.FunctionSelector, 'Függvény');
 			
-			this.EditFrequency = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [180 15 90 25]);
+			this.EditFrequency = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [180 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h]);
 			SinePlotter.AddLabel(this.EditFrequency, 'Körfrekvencia');
 			
-			this.EditPhase = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [280 15 90 25]);
+			this.EditPhase = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [280 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h]);
 			SinePlotter.AddLabel(this.EditPhase, 'Fázis');
 			
-			this.EditOffset = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [380 15 90 25]);
+			this.EditOffset = uicontrol('Parent', this.Window, 'Style', 'edit', 'Position', [380 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h]);
 			SinePlotter.AddLabel(this.EditOffset, 'Eltolás');
 			
 			this.AddButton = uicontrol('Style', 'pushbutton', 'String', 'Hozzáadás', ...
-				'Position', [480 15 90 25], ...
+				'Position', [480 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h], ...
 				'Callback', @this.AddFunction);
 			
 			this.ModifyButton = uicontrol('Style', 'pushbutton', 'String', 'Módosítás', ...
-				'Position', [580 15 90 25], 'Enable', 'off');
+				'Position', [580 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h], 'Enable', 'on', 'Callback', @this.ModifyFunction);
 						
 			this.DeleteButton = uicontrol('Style', 'pushbutton', 'String', 'Eltávolítás', ...
-				'Position', [680 15 90 25], 'Enable', 'on', 'Callback', @this.RemoveFunction);
+				'Position', [680 SinePlotter.H_4 SinePlotter.B_w SinePlotter.B_h], 'Enable', 'on', 'Callback', @this.RemoveFunction);
 			
 			this.FunctionList = uicontrol('Style', 'listbox');
-			this.FunctionList.Position = [10, 15+25+20+15, SinePlotter.L_0, this.Window.Position(4) - (15+25+20) - 2*15];
+			this.FunctionList.Position = [10, SinePlotter.H_4+SinePlotter.B_h+SinePlotter.H_3+SinePlotter.H_4, SinePlotter.L_0, this.Window.Position(4) - (SinePlotter.H_4+SinePlotter.B_h+SinePlotter.H_3) - 2*15];
 			
 			this.AxesTop = axes('Parent', this.Window, 'Units', 'pixels');
-			%TODO Paraméteresre alakítani az elhelyezést 
 			%TODO függvényeket csinálni a méretezéshez
 			this.AxesTop.Position = [ ...
-				15+SinePlotter.L_0+30, ...											% A FunctionList mellé kerül
-				this.GetAxisHeight() + (2*15 + 25 + 20 + SinePlotter.H_2 + SinePlotter.H_3), ...	% Gombok feletti rész fele - hézag
-				this.Window.Position(3) - (15+SinePlotter.L_0+30) - 15, ...
+				15 + SinePlotter.L_0 + 30, ...											% A FunctionList mellé kerül
+				this.GetAxisHeight() + (2*SinePlotter.H_4 + SinePlotter.B_h + 20 + SinePlotter.H_2 + SinePlotter.H_3), ...	% Gombok feletti rész fele - hézag
+				this.Window.Position(3) - (SinePlotter.H_4 + SinePlotter.L_0 + 30) - 15, ...
 				this.GetAxisHeight() ... % Gombok feletti rész fele - hézag
 				];
 			
@@ -104,9 +106,9 @@ classdef SinePlotter < handle
 			
 			this.AxesBottom = axes('Parent', this.Window, 'Units', 'pixels');
 			this.AxesBottom.Position = [ ...
-				15+SinePlotter.L_0+30, ...											
-				15+25+20+15 + SinePlotter.H_3, ...	
-				this.Window.Position(3) - (15+SinePlotter.L_0+30) - 15, ...
+				15+SinePlotter.L_0 + 30, ...											
+				SinePlotter.H_4 + SinePlotter.B_h + 20 + 15 + SinePlotter.H_3, ...	
+				this.Window.Position(3) - (SinePlotter.H_4 + SinePlotter.L_0 + 30) - 15, ...
 				this.GetAxisHeight() ...
 				];
 			
@@ -117,17 +119,15 @@ classdef SinePlotter < handle
 		
 		function a_y = GetAxisHeight(this)
 			% A tengelykeresztek magassága
-			a_y = (this.Window.Position(4) - 2*15 - SinePlotter.H_1 - SinePlotter.H_2 - SinePlotter.H_3 - 25 - 20)/2;
+			a_y = (this.Window.Position(4) - 2*SinePlotter.H_4 - SinePlotter.H_1 - SinePlotter.H_2 - SinePlotter.H_3 - 25 - 20)/2;
 		end
 		
 		function AddFunction(this, h, ~, ~)
 			% Vezérlõ értékének olvasása
-			A = str2double(this.EditAmplitude.String);			% Ha nem szám akkor NaN
+			A = eval(this.EditAmplitude.String);			% Ha nem szám akkor NaN
 			F = eval(this.EditFrequency.String);
-			P = str2double(this.EditPhase.String);
-			O = str2double(this.EditOffset.String);
-			
-			%TODO: Beolvasási 'callback hiba kiküszöbölése
+			P = eval(this.EditPhase.String);
+			O = eval(this.EditOffset.String);
 			
 			if ((~isnan(A)) && (~isnan(F)) && (~isnan(P)) && (~isnan(O)))
 				% Új elem kerül az adatbázisba
@@ -139,7 +139,6 @@ classdef SinePlotter < handle
 					O, ...
 					0 ...
 					};
-				%this.ModifyButton('Enable','on')
 				
 				this.FunctionList.String{end+1} = this.ParamToString();
 				
@@ -163,6 +162,11 @@ classdef SinePlotter < handle
 			drawnow;
 		end
 		
+		function ModifyFunction(this, h, ~, ~)
+		% TODO megírni hogy mûködjön...
+			
+			
+		end
 		
 		function p = CreatePlot(this, i)
 			
@@ -198,24 +202,22 @@ classdef SinePlotter < handle
 		end
 		
 		function WindowSizeChanged(this, h, ~, ~)
-			% Kezelni kell a fõablak átméretezését - minimális ablakméret
-			% megadása this.WindowPosition(3) 783, this.WindowPosition(4) 376
-				
+			
 			% Meg kell növelni a függvény lista magasságát
 			% Az összefüggés ugyanaz, mint a létrehozásnál, csak frissül a Window.Position(4)
 			this.FunctionList.Position = [10, 15+25+20+15, SinePlotter.L_0, this.Window.Position(4) - (15+25+20) - 2*15];
 
 			this.AxesTop.Position = [ ...
 				15+SinePlotter.L_0+30, ...											% A FunctionList mellé kerül
-				this.GetAxisHeight() + (2*15 + 25 + 20 + SinePlotter.H_2 + SinePlotter.H_3), ...	% Gombok feletti rész fele - hézag
-				this.Window.Position(3) - (15+SinePlotter.L_0+30) - 15, ...
+				this.GetAxisHeight() + (2*SinePlotter.H_4 + SinePlotter.B_h + 20 + SinePlotter.H_2 + SinePlotter.H_3), ...	% Gombok feletti rész fele - hézag
+				this.Window.Position(3) - (SinePlotter.H_4 + SinePlotter.L_0 + 30) - 15, ...
 				this.GetAxisHeight() ... % Gombok feletti rész fele - hézag
 				];
 
 			this.AxesBottom.Position = [ ...
 				15+SinePlotter.L_0+30, ...											
-				15+25+20+15 + SinePlotter.H_3, ...	
-				this.Window.Position(3) - (15+SinePlotter.L_0+30) - 15, ...
+				SinePlotter.H_4 + SinePlotter.B_h+20+15 + SinePlotter.H_3, ...	
+				this.Window.Position(3) - (15+SinePlotter.L_0 + 30) - 15, ...
 				this.GetAxisHeight() ...
 				];
 			
