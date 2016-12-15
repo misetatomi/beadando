@@ -156,15 +156,15 @@ classdef SinePlotter < handle
 				i = this.FunctionList.Value;
 				if isempty(this.FunctionDataBase)
 					
-				msgbox('A lista üres!', 'Hiba!', 'error');
+					msgbox('A lista üres!', 'Hiba!', 'error');
 				else
-				this.FunctionList.String(i) = [];
+					this.FunctionList.String(i) = [];
 		
-				delete(this.FunctionDataBase{i, 6});
+					delete(this.FunctionDataBase{i, 6});
 		
-				this.FunctionDataBase(i, :) = [];
+					this.FunctionDataBase(i, :) = [];
 		
-				drawnow;
+					drawnow;
 				end
 		end
 		
@@ -197,7 +197,7 @@ classdef SinePlotter < handle
 				
 					% Ábrázolás
 					
-					
+					cla(this.AxesTop, 'reset');
 					
 					this.CreatePlot(size(this.FunctionDataBase, 1));
 					
@@ -224,11 +224,7 @@ classdef SinePlotter < handle
 			this.FunctionDataBase{i, 6} = p;
 			
 		end
-		
-		function DeletePlot(this, i)
-			% TODO megírni
-		end
-		
+				
 		function str = ParamToString(this)
 			
 			f = ' cos';
