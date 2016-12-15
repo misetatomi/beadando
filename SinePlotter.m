@@ -169,7 +169,6 @@ classdef SinePlotter < handle
 		end
 		
 		function ModifyFunction(this, h, ~, ~)
-		% TODO megírni hogy mûködjön...
 			if isempty(this.FunctionDataBase)
 			msgbox('A lista üres!', 'Hiba!', 'error');
 			else
@@ -181,6 +180,8 @@ classdef SinePlotter < handle
 				O = eval(this.EditOffset.String);
 			
 				i = this.FunctionList.Value;
+				c = this.FunctionDataBase{i, 6}.Color;
+				delete(this.FunctionDataBase{i, 6});
 			
 				if ((~isnan(A)) && (~isnan(F)) && (~isnan(P)) && (~isnan(O)))
 					% Új elem kerül az adatbázisba
@@ -197,9 +198,8 @@ classdef SinePlotter < handle
 				
 					% Ábrázolás
 					
-					cla(this.AxesTop, 'reset');
-					
 					this.CreatePlot(size(this.FunctionDataBase, 1));
+					this.FunctionDataBase{i, 6}.Color = c;
 					
 				else
 					msgbox('Hiba történt!', 'Hiba!', 'error');
