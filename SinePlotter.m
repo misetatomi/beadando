@@ -25,6 +25,7 @@ classdef SinePlotter < handle
 		
 		XLim = [0, 1];
 		
+		
 	end
 	
 	properties(Constant)
@@ -152,19 +153,58 @@ classdef SinePlotter < handle
 		
 		function RemoveFunction(this, h, ~, ~)
 			% TODO Hibakezelés (nincs kiválasztás, üres a lista, ...)
-			i = this.FunctionList.Value;
-			this.FunctionList.String(i) = [];
-			
-			delete(this.FunctionDataBase{i, 6});
-			
-			this.FunctionDataBase(i, :) = [];
-			
-			drawnow;
+				i = this.FunctionList.Value;
+				if isempty(this.FunctionDataBase)
+					
+				msgbox('A lista üres!', 'Hiba!', 'error');
+				else
+				this.FunctionList.String(i) = [];
+		
+				delete(this.FunctionDataBase{i, 6});
+		
+				this.FunctionDataBase(i, :) = [];
+		
+				drawnow;
+				end
 		end
 		
 		function ModifyFunction(this, h, ~, ~)
 		% TODO megírni hogy mûködjön...
+			if isempty(this.FunctionDataBase)
+			msgbox('A lista üres!', 'Hiba!', 'error');
+			else
+				
+				% Vezérlõ értékének olvasása
+				A = eval(this.EditAmplitude.String);			% Ha nem szám akkor NaN
+				F = eval(this.EditFrequency.String);
+				P = eval(this.EditPhase.String);
+				O = eval(this.EditOffset.String);
 			
+				i = this.FunctionList.Value;
+			
+				if ((~isnan(A)) && (~isnan(F)) && (~isnan(P)) && (~isnan(O)))
+					% Új elem kerül az adatbázisba
+					this.FunctionDataBase(i, 1:6) = { ...
+						A, ...
+						this.FunctionSelector.Value, ...				% 1: cos; 2: sin
+						F, ...
+						P, ...
+						O, ...
+						0 ...
+						};
+		
+					this.FunctionList.String{i} = this.ParamToString();
+				
+					% Ábrázolás
+					
+					
+					
+					this.CreatePlot(size(this.FunctionDataBase, 1));
+					
+				else
+					msgbox('Hiba történt!', 'Hiba!', 'error');
+				end
+			end
 			
 		end
 		
@@ -183,6 +223,10 @@ classdef SinePlotter < handle
 			
 			this.FunctionDataBase{i, 6} = p;
 			
+		end
+		
+		function DeletePlot(this, i)
+			% TODO megírni
 		end
 		
 		function str = ParamToString(this)
@@ -205,8 +249,8 @@ classdef SinePlotter < handle
 			
 			% Meg kell növelni a függvény lista magasságát
 			% Az összefüggés ugyanaz, mint a létrehozásnál, csak frissül a Window.Position(4)
-			this.FunctionList.Position = [10, 15+25+20+15, SinePlotter.L_0, this.Window.Position(4) - (15+25+20) - 2*15];
-
+			this.FunctionList.Position = [10, SinePlotter.H_4+SinePlotter.B_h+SinePlotter.H_3+SinePlotter.H_4, SinePlotter.L_0, this.Window.Position(4) - (SinePlotter.H_4+SinePlotter.B_h+SinePlotter.H_3) - 2*15];
+			
 			this.AxesTop.Position = [ ...
 				15+SinePlotter.L_0+30, ...											% A FunctionList mellé kerül
 				this.GetAxisHeight() + (2*SinePlotter.H_4 + SinePlotter.B_h + 20 + SinePlotter.H_2 + SinePlotter.H_3), ...	% Gombok feletti rész fele - hézag
