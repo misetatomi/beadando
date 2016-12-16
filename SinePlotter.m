@@ -131,16 +131,16 @@ classdef SinePlotter < handle
             P = NaN;
             O = NaN;
             if (~isempty(this.EditAmplitude.String))
-			A = eval(this.EditAmplitude.String);	
+			A = str2double(this.EditAmplitude.String);	
             end
             if (~isempty(this.EditFrequency.String))
-			F = eval(this.EditFrequency.String);
+			F = str2double(this.EditFrequency.String);
             end
             if (~isempty(this.EditPhase.String))
-			P = eval(this.EditPhase.String);
+			P = str2double(this.EditPhase.String);
             end
             if (~isempty(this.EditOffset.String))
-			O = eval(this.EditOffset.String);
+			O = str2double(this.EditOffset.String);
             end
             
 			if ((~isnan(A)) && (~isnan(F)) && (~isnan(P)) && (~isnan(O)))
@@ -160,7 +160,7 @@ classdef SinePlotter < handle
 				this.CreatePlot(size(this.FunctionDataBase, 1));
 				
 			else
-				msgbox('Hiba történt!', 'Hiba!', 'error');
+				msgbox('Beviteli hiba!', 'Hiba!', 'error');
 			end
 		end
 		
@@ -191,10 +191,18 @@ classdef SinePlotter < handle
 			else
 				
 				% Vezérlõ értékének olvasása
-				A = eval(this.EditAmplitude.String);			% Ha nem szám akkor NaN
-				F = eval(this.EditFrequency.String);
-				P = eval(this.EditPhase.String);
-				O = eval(this.EditOffset.String);
+                if (~isempty(this.EditAmplitude.String))
+				A = str2double(this.EditAmplitude.String);	
+                end
+                if (~isempty(this.EditFrequency.String))
+				F = str2double(this.EditFrequency.String);
+                end
+                if (~isempty(this.EditPhase.String))
+				P = str2double(this.EditPhase.String);
+                end
+                if (~isempty(this.EditOffset.String))
+				O = str2double(this.EditOffset.String);
+                end
 			
 				i = this.FunctionList.Value;
 				c = this.FunctionDataBase{i, 6}.Color;
@@ -219,7 +227,7 @@ classdef SinePlotter < handle
 					this.FunctionDataBase{i, 6}.Color = c;
 					
 				else
-					msgbox('Hiba történt!', 'Hiba!', 'error');
+					msgbox('Beviteli hiba!', 'Hiba!', 'error');
 				end
 			end
 			
