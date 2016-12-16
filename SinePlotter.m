@@ -55,6 +55,8 @@ classdef SinePlotter < handle
 			this.Window = figure(100);
 			this.Window.ToolBar = 'none';
 			this.Window.MenuBar = 'none';
+            this.Window.Name    = 'Hullámok és interferenciájuk';
+            this.Window.NumberTitle = 'off';
 			
 			% Az ablak legyen legalább 800 képpont széles
 			this.Window.Position(3) = 800;
@@ -250,8 +252,9 @@ classdef SinePlotter < handle
 			RefreshSum(this);
         end
         function RefreshSum(this)
+            delete(this.SumPlot); 
 			if isempty(this.FunctionDataBase)
-            delete(this.SumPlot);    
+            return;    
             end
 			% A legnagyobb körfrekvencia
 			wmax = max([this.FunctionDataBase{:, 3}]);
@@ -272,7 +275,6 @@ classdef SinePlotter < handle
 				x = x + f(t);
 			end
 			
-			delete(this.SumPlot);
 			this.SumPlot = plot(this.AxesBottom, t, x, 'LineWidth', 3);
 		end
 				
