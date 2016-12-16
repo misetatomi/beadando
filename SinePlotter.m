@@ -250,7 +250,9 @@ classdef SinePlotter < handle
 			RefreshSum(this);
         end
         function RefreshSum(this)
-			
+			if isempty(this.FunctionDataBase)
+            delete(this.SumPlot);    
+            end
 			% A legnagyobb körfrekvencia
 			wmax = max([this.FunctionDataBase{:, 3}]);
 			
