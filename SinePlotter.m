@@ -163,6 +163,8 @@ classdef SinePlotter < handle
 					delete(this.FunctionDataBase{i, 6});
 		
 					this.FunctionDataBase(i, :) = [];
+                    
+                    this.FunctionList.Value = 1;
 		
 					drawnow;
 				end
