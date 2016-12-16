@@ -6,7 +6,7 @@ classdef SinePlotter < handle
 		
 		% A fõablak mutatója
 		Window;
-		
+		SumPlot;
 		EditAmplitude;
 		FunctionSelector;
 		EditFrequency;
@@ -167,6 +167,7 @@ classdef SinePlotter < handle
                     this.FunctionList.Value = 1;
 		
 					drawnow;
+                    RefreshSum(this);
 				end
 		end
 		
@@ -200,7 +201,7 @@ classdef SinePlotter < handle
 				
 					% Ábrázolás
 					
-					this.CreatePlot(size(this.FunctionDataBase, 1));
+					this.CreatePlot(i);
 					this.FunctionDataBase{i, 6}.Color = c;
 					
 				else
@@ -224,7 +225,31 @@ classdef SinePlotter < handle
 			p = plot(this.AxesTop, t, f(t), 'LineWidth', 2); 
 			
 			this.FunctionDataBase{i, 6} = p;
+			RefreshSum(this);
+        end
+        function RefreshSum(this)
 			
+			% A legnagyobb körfrekvencia
+			wmax = max([this.FunctionDataBase{:, 3}]);
+			
+			% Az eredõt a legnagyobb frekvenciájú összetevõ alapján kell ábrázolni
+			t = [0:(2*pi/wmax/100):1, 1];
+			x = zeros(size(t));
+			
+			for i = 1:size(this.FunctionDataBase, 1);
+				a = [this.FunctionDataBase{i, 1:5}];
+				
+				f = @(t) a(1)*cos(a(3) * t + a(4)) + a(5);
+				if (a(2) == 2)
+					% Szinusz
+					f = @(t) a(1)*sin(a(3) * t + a(4)) + a(5);
+				end
+				
+				x = x + f(t);
+			end
+			
+			delete(this.SumPlot);
+			this.SumPlot = plot(this.AxesBottom, t, x, 'LineWidth', 3);
 		end
 				
 		function str = ParamToString(this)
