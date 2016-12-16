@@ -100,7 +100,7 @@ classdef SinePlotter < handle
 				this.GetAxisHeight() ... % Gombok feletti rész fele - hézag
 				];
 			
-			title(this.AxesTop, 'Felsõ tengelykereszt', 'FontSize', 16, 'FontWeight', 'bold');
+			title(this.AxesTop, 'Hullámok', 'FontSize', 16, 'FontWeight', 'bold');
 			hold(this.AxesTop, 'on');
 			
 			% A másik tengelykereszt
@@ -113,7 +113,7 @@ classdef SinePlotter < handle
 				this.GetAxisHeight() ...
 				];
 			
-			title(this.AxesBottom, 'Alsó tengelykereszt', 'FontSize', 16, 'FontWeight', 'bold'); 
+			title(this.AxesBottom, 'Interferencia', 'FontSize', 16, 'FontWeight', 'bold'); 
 			hold(this.AxesBottom, 'on');
 			
 		end
@@ -125,11 +125,24 @@ classdef SinePlotter < handle
 		
 		function AddFunction(this, h, ~, ~)
 			% Vezérlõ értékének olvasása
-			A = eval(this.EditAmplitude.String);			% Ha nem szám akkor NaN
+            % Ha nem szám akkor NaN
+            A = NaN;
+            F = NaN;
+            P = NaN;
+            O = NaN;
+            if (~isempty(this.EditAmplitude.String))
+			A = eval(this.EditAmplitude.String);	
+            end
+            if (~isempty(this.EditFrequency.String))
 			F = eval(this.EditFrequency.String);
+            end
+            if (~isempty(this.EditPhase.String))
 			P = eval(this.EditPhase.String);
+            end
+            if (~isempty(this.EditOffset.String))
 			O = eval(this.EditOffset.String);
-			
+            end
+            
 			if ((~isnan(A)) && (~isnan(F)) && (~isnan(P)) && (~isnan(O)))
 				% Új elem kerül az adatbázisba
 				this.FunctionDataBase(end+1, 1:6) = { ...
@@ -165,9 +178,10 @@ classdef SinePlotter < handle
 					this.FunctionDataBase(i, :) = [];
                     
                     this.FunctionList.Value = 1;
+                    
+                    RefreshSum(this);
 		
 					drawnow;
-                    RefreshSum(this);
 				end
 		end
 		
